@@ -2,43 +2,95 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function Menu() {
-  // Sample menu items data for demonstration purposes
-  const [menus, setMenus] = useState([]);
+  const [menuItems, setMenuItems] = useState([]);
+  const [newMenuItemData, setNewMenuItemData] = useState({
+    name: "",
+    price: "",
+    description: "",
+    image_url: "",
+  });
+
   useEffect(() => {
-    async function getMenus() {
+    async function fetchMenuItems() {
       try {
         const response = await axios.get("http://localhost:3031/menus");
-        console.log("Menus Data:", response.data);
-        setMenus(response.data);
+        setMenuItems(response.data);
       } catch (error) {
         console.error(error);
       }
     }
 
-    // Run once when component mounts or when menus.length changes
-    if (menus.length === 0) {
-      console.log("Menus before API call:", menus.length);
-      getMenus();
+    fetchMenuItems();
+  }, []);
+
+  const handleAddMenuItem = async () => {
+    try {
+      await axios.post("http://localhost:3031/menus", newMenuItemData);
+      const response = await axios.get("http://localhost:3031/menus");
+      setMenuItems(response.data);
+    } catch (error) {
+      console.error(error);
     }
-  }, [menus.length]); // Include menus.length in the dependency array
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewMenuItemData({
+      ...newMenuItemData,
+      [name]: value,
+    });
+  };
 
   return (
     <div>
       <h2>Menu</h2>
+      <form onSubmit={handleAddMenuItem}>
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          value={newMenuItemData.name}
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          name="price"
+          placeholder="Price"
+          value={newMenuItemData.price}
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          name="description"
+          placeholder="Description"
+          value={newMenuItemData.description}
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          name="image_url"
+          placeholder="Image URL"
+          value={newMenuItemData.image_url}
+          onChange={handleInputChange}
+        />
+        <button type="submit">Add Menu Item</button>
+      </form>
       <table>
         <thead>
           <tr>
             <th>Name</th>
             <th>Price</th>
             <th>Description</th>
+            <th>Image URL</th>
           </tr>
         </thead>
         <tbody>
-          {menus.map((item) => (
-            <tr key={item.id}>
-              <td>{item.name}</td>
-              <td>{item.price}</td>
-              <td>{item.description}</td>
+          {menuItems.map((menuItem) => (
+            <tr key={menuItem.id}>
+              <td>{menuItem.name}</td>
+              <td>{menuItem.price}</td>
+              <td>{menuItem.description}</td>
+              <td>{menuItem.image_url}</td>
             </tr>
           ))}
         </tbody>
