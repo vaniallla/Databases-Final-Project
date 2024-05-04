@@ -45,13 +45,7 @@ function Inventory() {
     <div>
       <h2>Inventory</h2>
       <form onSubmit={handleAddItem}>
-        <input
-          type="text"
-          name="vendor_id"
-          placeholder="Vendor ID"
-          value={newItemData.vendor_id}
-          onChange={handleInputChange}
-        />
+        {/* Your form inputs */}
         <input
           type="text"
           name="name"
@@ -76,6 +70,7 @@ function Inventory() {
         <button type="submit">Add Item</button>
       </form>
       <table>
+        {/* Inventory table */}
         <thead>
           <tr>
             <th>Name</th>
