@@ -1,20 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 function Inventory() {
   // Sample inventory data for demonstration purposes
-  const inventoryItems = [
-    { id: 1, name: "Buns", quantity: 50, price: "$1.50", vendorId: 101 },
-    { id: 2, name: "Patties", quantity: 100, price: "$2.00", vendorId: 102 },
-    { id: 3, name: "Lettuce", quantity: 20, price: "$0.75", vendorId: 103 },
-    { id: 4, name: "Tomatoes", quantity: 30, price: "$0.60", vendorId: 104 },
-    {
-      id: 5,
-      name: "Cheese Slices",
-      quantity: 40,
-      price: "$1.20",
-      vendorId: 105,
-    },
-  ];
+  const [inventory, setInventory] = useState([]);
+  useEffect(() => {
+    async function getInventory() {
+      try {
+        const response = await axios.get("http://localhost:3031/inventory");
+        console.log("Inventory Data:", response.data);
+        setInventory(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    // Run once when component mounts
+    if (inventory.length === 0) {
+      console.log("Inventory before API call:", inventory.length);
+      getInventory();
+    }
+  }, []);
 
   return (
     <div>
@@ -29,7 +35,7 @@ function Inventory() {
           </tr>
         </thead>
         <tbody>
-          {inventoryItems.map((item) => (
+          {inventory.map((item) => (
             <tr key={item.id}>
               <td>{item.name}</td>
               <td>{item.quantity}</td>

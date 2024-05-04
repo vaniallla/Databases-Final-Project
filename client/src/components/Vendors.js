@@ -1,27 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 function Vendors() {
   // Sample vendor data for demonstration purposes
-  const vendors = [
-    {
-      id: 1,
-      name: "Vendor A",
-      email: "john@example.com",
-      phone: "123-456-7890",
-    },
-    {
-      id: 2,
-      name: "Vendor B",
-      email: "jane@example.com",
-      phone: "987-654-3210",
-    },
-    {
-      id: 3,
-      name: "Vendor C",
-      email: "bob@example.com",
-      phone: "111-222-3333",
-    },
-  ];
+  const [vendors, setVendors] = useState([]);
+  useEffect(() => {
+    async function getVendors() {
+      try {
+        const response = await axios.get("http://localhost:3031/vendors");
+        console.log("Vendors Data:", response.data);
+        setVendors(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    // Run once when component mounts
+    if (vendors.length === 0) {
+      console.log("Vendors before API call:", vendors.length);
+      getVendors();
+    }
+  }, []);
 
   return (
     <div>

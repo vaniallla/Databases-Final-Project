@@ -1,44 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 function Menu() {
   // Sample menu items data for demonstration purposes
-  const menuItems = [
-    {
-      id: 1,
-      name: "Classic Burger",
-      price: "$5.99",
-      description:
-        "A classic beef burger with lettuce, tomato, onion, and pickles.",
-    },
-    {
-      id: 2,
-      name: "Cheeseburger",
-      price: "$6.99",
-      description:
-        "A beef burger topped with melted cheese, lettuce, tomato, onion, and pickles.",
-    },
-    {
-      id: 3,
-      name: "Bacon Burger",
-      price: "$7.99",
-      description:
-        "A beef burger topped with crispy bacon, melted cheese, lettuce, tomato, onion, and pickles.",
-    },
-    {
-      id: 4,
-      name: "Veggie Burger",
-      price: "$6.49",
-      description:
-        "A vegetarian burger patty made with black beans, topped with lettuce, tomato, onion, and pickles.",
-    },
-    {
-      id: 5,
-      name: "Chicken Burger",
-      price: "$7.49",
-      description:
-        "A grilled chicken breast fillet served on a bun with lettuce, tomato, onion, and pickles.",
-    },
-  ];
+  const [menus, setMenus] = useState([]);
+  useEffect(() => {
+    async function getMenus() {
+      try {
+        const response = await axios.get("http://localhost:3031/menus");
+        console.log("Menus Data:", response.data);
+        setMenus(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    // Run once when component mounts or when menus.length changes
+    if (menus.length === 0) {
+      console.log("Menus before API call:", menus.length);
+      getMenus();
+    }
+  }, [menus.length]); // Include menus.length in the dependency array
 
   return (
     <div>
@@ -52,7 +34,7 @@ function Menu() {
           </tr>
         </thead>
         <tbody>
-          {menuItems.map((item) => (
+          {menus.map((item) => (
             <tr key={item.id}>
               <td>{item.name}</td>
               <td>{item.price}</td>
