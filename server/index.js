@@ -156,12 +156,19 @@ app.post("/vendors", (req, res) => {
 // Define the POST endpoint for submitting the order form
 app.post("/submit-order", (req, res) => {
   // Extract data from the request body
-  const { itemId, date, purchaseQuantity, totalPrice } = req.body;
+  const {
+    inventoryId,
+    date,
+    purchaseQuantity,
+    totalPrice,
+    vendorId,
+    inventoryPrice,
+  } = req.body;
 
   // Insert the order data into the order_form table
   db.query(
-    "INSERT INTO order_form (inventory_id, date, purchase_quantity, total_price) VALUES (?, ?, ?, ?)",
-    [itemId, date, purchaseQuantity, totalPrice],
+    "INSERT INTO order_form (date, vendor_id, inventory_id, inventory_price, purchase_quantity, total_price) VALUES (?, ?, ?, ?, ?, ?)",
+    [date, vendorId, inventoryId, inventoryPrice, purchaseQuantity, totalPrice],
     (err, result) => {
       if (err) {
         console.error("Error inserting order:", err);
@@ -172,7 +179,7 @@ app.post("/submit-order", (req, res) => {
         // Update the inventory in the inventory table
         db.query(
           "UPDATE inventory SET quantity = quantity + ? WHERE id = ?",
-          [purchaseQuantity, itemId],
+          [purchaseQuantity, inventoryId],
           (err, result) => {
             if (err) {
               console.error("Error updating inventory:", err);

@@ -44,10 +44,11 @@ function OrderForm() {
         inventoryPrice: selectedInventory ? selectedInventory.price : 0,
       });
     } else if (name === "purchaseQuantity") {
-      const totalPrice = parseInt(value) * formData.inventoryPrice;
+      const quantity = parseInt(value);
+      const totalPrice = quantity * formData.inventoryPrice;
       setFormData({
         ...formData,
-        [name]: value,
+        [name]: isNaN(quantity) ? "" : quantity,
         totalPrice: isNaN(totalPrice) ? 0 : totalPrice,
       });
     } else {
@@ -56,7 +57,6 @@ function OrderForm() {
         [name]: value,
       });
     }
-    console.log(formData);
   };
 
   const handleSubmit = async (e) => {
@@ -69,7 +69,7 @@ function OrderForm() {
         vendorId: formData.vendorId,
         inventoryId: formData.inventoryId,
         inventoryPrice: formData.inventoryPrice,
-        totalPrice: formData.totalPrice, // Include the totalPrice field
+        totalPrice: formData.inventoryPrice * formData.purchaseQuantity, // Include the totalPrice field
       });
 
       alert("Order submitted successfully");
