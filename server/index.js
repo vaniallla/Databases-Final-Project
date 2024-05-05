@@ -153,6 +153,41 @@ app.post("/vendors", (req, res) => {
   );
 });
 
+// Define the POST endpoint for submitting the order form
+app.post("/submit-order", (req, res) => {
+  // Extract data from the request body
+  const { itemId, date, purchaseQuantity, totalPrice } = req.body;
+
+  // Insert the order data into the order_form table
+  db.query(
+    "INSERT INTO order_form (inventory_id, date, purchase_quantity, total_price) VALUES (?, ?, ?, ?)",
+    [itemId, date, purchaseQuantity, totalPrice],
+    (err, result) => {
+      if (err) {
+        console.error("Error inserting order:", err);
+        res.status(500).json({ error: "Internal server error" });
+      } else {
+        console.log("Order added successfully:", result);
+
+        // Update the inventory in the inventory table
+        db.query(
+          "UPDATE inventory SET quantity = quantity + ? WHERE id = ?",
+          [purchaseQuantity, itemId],
+          (err, result) => {
+            if (err) {
+              console.error("Error updating inventory:", err);
+              res.status(500).json({ error: "Internal server error" });
+            } else {
+              console.log("Inventory updated successfully:", result);
+              res.status(201).json({ message: "Order submitted successfully" });
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
 app.listen(3031, () => {
   console.log("server listening on port 3031");
 });

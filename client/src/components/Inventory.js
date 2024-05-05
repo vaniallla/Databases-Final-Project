@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function Inventory() {
   const [inventory, setInventory] = useState([]);
@@ -88,6 +89,9 @@ function Inventory() {
           ))}
         </tbody>
       </table>
+      <Link to="/order-form">
+        <button>Order Form</button>
+      </Link>
     </div>
   );
 }
