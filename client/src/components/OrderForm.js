@@ -71,6 +71,7 @@ function OrderForm() {
         inventoryPrice: formData.inventoryPrice,
         totalPrice: formData.inventoryPrice * formData.purchaseQuantity, // Include the totalPrice field
       });
+      console.log(formData);
 
       alert("Order submitted successfully");
     } catch (error) {
