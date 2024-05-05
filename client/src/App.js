@@ -4,7 +4,6 @@ import Employees from "./components/Employees";
 import Inventory from "./components/Inventory";
 import Vendors from "./components/Vendors";
 import Menu from "./components/Menu";
-import Reports from "./components/Reports";
 import OrderForm from "./components/OrderForm";
 
 function App() {
@@ -28,16 +27,12 @@ function App() {
             <Link to="/menu">
               <button>Menu</button>
             </Link>
-            <Link to="/reports">
-              <button>Reports</button>
-            </Link>
           </div>
           <Routes>
             <Route path="/employees" element={<Employees />} />
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/vendors" element={<Vendors />} />
             <Route path="/menu" element={<Menu />} />
-            <Route path="/reports" element={<Reports />} />
             <Route path="/order-form" element={<OrderForm />} />{" "}
             {/* Route for the OrderForm component */}
           </Routes>
